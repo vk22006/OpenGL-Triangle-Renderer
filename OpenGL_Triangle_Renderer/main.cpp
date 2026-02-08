@@ -52,7 +52,26 @@ void VertexSpecifications() {
 		0.8f, 0.8f, 0.0f
 	};
 
-	
+	//Transfer memory to GPU
+
+	//Generate and bind VAO
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	//Generate and bind VBO
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	//Sending data and specifying its target, size and its usage
+	glBufferData(
+		GL_ARRAY_BUFFER,
+		vertices.size() * sizeof(float),
+		vertices.data(),
+		GL_STATIC_DRAW
+	);
+	glEnableVertexAttribArray(0);
 }
 
 void CreateGraphicsPipeline() {}
