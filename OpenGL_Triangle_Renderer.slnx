@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="OpenGL_Triangle_Renderer/OpenGL_Triangle_Renderer.vcxproj" Id="620903d3-2b5e-43ad-b404-df8dd2b00cbc" />
+</Solution>
