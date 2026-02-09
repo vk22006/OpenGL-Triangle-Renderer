@@ -131,6 +131,16 @@ int main() {
 	}
 
 	// TODO: Linking the shaders
+	unsigned int shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);     // Attaching vertex shader with shader program
+	glAttachShader(shaderProgram, fragmentShader);   // Attaching fragment shader with shader program
+	glLinkProgram(shaderProgram);                    // Linking the above attached sahders with the program
+
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::SHADER::LINKING_FAILED\n" << infoLog << "\n";
+	}
 
 	VertexSpecifications();
 
