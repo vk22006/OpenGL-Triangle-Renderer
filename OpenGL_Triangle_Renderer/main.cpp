@@ -20,29 +20,27 @@ const char* fragmentShaderSource = "#version 330 core\n"
 	"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 	"}\n\0";
 
-void processInput(GLFWwindow* window)
+static void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 }
 
-void getOpenGLVerInfo() {
+static void getOpenGLVerInfo() {
 	std::cout << "Vendor: " << glGetString(GL_VENDOR) << "\n";
 	std::cout << "Renderer: " << glGetString(GL_RENDERER) << "\n";
 	std::cout << "Version: " << glGetString(GL_VERSION) << "\n";
 	std::cout << "Shading language: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
 }
 
-
-int main() {
-
+static GLFWwindow* Initialize() {
 	//Initialize glfw
 	glfwInit();
 
@@ -54,7 +52,6 @@ int main() {
 	if (window == NULL) {
 		std::cout << "Failed to create new window";
 		glfwTerminate();
-		return -1;
 	}
 
 	glfwMakeContextCurrent(window);
@@ -64,9 +61,12 @@ int main() {
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
 	}
 
+	return window;
+}
+
+static unsigned int CreateLinkShader() {
 	//Vertex shader
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -107,12 +107,16 @@ int main() {
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	return shaderProgram;
+}
+
+static unsigned int GenerateBindArrayBuffer(unsigned int* VBO) {
 	//Stores in CPU
 	const std::vector<float> vertices = {
 		// x     y     z  
 		-0.8f, -0.8f, 0.0f,
-		0.8f, -0.8f, 0.0f,
-		0.8f, 0.8f, 0.0f
+		-0.8f, 0.8f, 0.0f,
+		0.8f, -0.8f, 0.0f
 	};
 
 	//Transfer memory to GPU
@@ -122,10 +126,8 @@ int main() {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	//Generate and bind VBO
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glGenBuffers(1, VBO); // Use pointer to set VBO in main
+	glBindBuffer(GL_ARRAY_BUFFER, *VBO);
 
 	//Sending data and specifying its target, size and its usage
 	glBufferData(
@@ -138,6 +140,10 @@ int main() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	return VAO;
+}
+
+static void RenderLoop(GLFWwindow* window, unsigned int shaderProgram, unsigned int VAO) {
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -155,12 +161,26 @@ int main() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+}
+
+
+int main() {
+
+	GLFWwindow* window = Initialize();
+
+	unsigned int shaderProgram = CreateLinkShader();
+
+	unsigned int VBO; // Declare VBO
+	unsigned int VAO = GenerateBindArrayBuffer(&VBO); // Pass VBO by pointer
+
+	RenderLoop(window, shaderProgram, VAO);
+
+	//Cleanup
 
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteProgram(shaderProgram);
-
 	glfwTerminate();
-	
+
 	return 0;
 }
