@@ -17,7 +17,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 	"out vec4 FragColor;\n"
 	"void main()\n"
 	"{\n"
-	"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+	"   FragColor = vec4(1.1f, 0.8f, 0.2f, 1.0f);\n"    // Change the color of triangle here
 	"}\n\0";
 
 static void processInput(GLFWwindow* window)
@@ -48,7 +48,7 @@ static GLFWwindow* Initialize() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(650, 650, "My First OpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(650, 650, "OpenGL Triangle Renderer", NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Failed to create new window";
 		glfwTerminate();
@@ -115,8 +115,8 @@ static unsigned int GenerateBindArrayBuffer(unsigned int* VBO) {
 	const std::vector<float> vertices = {
 		// x     y     z  
 		-0.8f, -0.8f, 0.0f,
-		-0.8f, 0.8f, 0.0f,
-		0.8f, -0.8f, 0.0f
+		0.8f, -0.8f, 0.0f,
+		0.0f, 0.8f, 0.0f
 	};
 
 	//Transfer memory to GPU
