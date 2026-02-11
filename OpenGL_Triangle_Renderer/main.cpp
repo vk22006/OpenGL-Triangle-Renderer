@@ -6,7 +6,7 @@
 const int SCR_WIDTH = 650;
 const int SCR_HEIGHT = 650;
 
-// Shader programs
+// ===| Shader Programs |==================================================================
 const char* vertexShaderSource = "#version 330 core\n"
 	"layout (location = 0) in vec3 aPos;\n"
 	"void main()\n"
@@ -26,6 +26,8 @@ static void processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true);
 }
 
+// ===| Set Viewport |==================================================================
+
 static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
@@ -33,12 +35,16 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+// ===| OpenGL Version Info |==================================================================
+
 static void getOpenGLVerInfo() {
 	std::cout << "Vendor: " << glGetString(GL_VENDOR) << "\n";
 	std::cout << "Renderer: " << glGetString(GL_RENDERER) << "\n";
 	std::cout << "Version: " << glGetString(GL_VERSION) << "\n";
 	std::cout << "Shading language: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
 }
+
+// ===| Init GLFW, GLAD and Create new window |=================================================
 
 static GLFWwindow* Initialize() {
 	//Initialize glfw
@@ -65,6 +71,8 @@ static GLFWwindow* Initialize() {
 
 	return window;
 }
+
+// ===| Creating and linking Linker, Fragment Shaders to a Shader program |======================
 
 static unsigned int CreateLinkShader() {
 	//Vertex shader
@@ -110,6 +118,8 @@ static unsigned int CreateLinkShader() {
 	return shaderProgram;
 }
 
+// ===| Generate and Bind VAO, VBO |=============================================================
+
 static unsigned int GenerateBindArrayBuffer(unsigned int* VBO) {
 	//Stores in CPU
 	const std::vector<float> vertices = {
@@ -143,6 +153,8 @@ static unsigned int GenerateBindArrayBuffer(unsigned int* VBO) {
 	return VAO;
 }
 
+// ===| Main Loop |===========================================================================
+
 static void RenderLoop(GLFWwindow* window, unsigned int shaderProgram, unsigned int VAO) {
 
 	while (!glfwWindowShouldClose(window)) {
@@ -163,6 +175,7 @@ static void RenderLoop(GLFWwindow* window, unsigned int shaderProgram, unsigned 
 	}
 }
 
+// =================================================================================================
 
 int main() {
 
