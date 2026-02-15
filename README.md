@@ -16,8 +16,6 @@ In order to achieve this, we need to follow the graphics pipeline. Here, I have 
 - Libraries: GLFW, GLAD
 
 ## Objectives
-
-- To update regularly (secret motivation 😅)
 - Organize and showcase my progress
 - To implement an end-to-end graphics pipeline and using it to render a triangle
 
