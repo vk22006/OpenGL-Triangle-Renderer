@@ -81,7 +81,7 @@ static GLFWwindow* Initialize() {
 
 static unsigned int CreateLinkShader() {
 	std::string vertexShaderSourceStr = LoadShaderProgram("./shaders/vertexShader.glsl");
-	std::string fragmentShaderSourceStr = LoadShaderProgram("./shaders/fraagmentShader.glsl");
+	std::string fragmentShaderSourceStr = LoadShaderProgram("./shaders/fragmentShader.glsl");
 
 	const char* vertexShaderSource = vertexShaderSourceStr.c_str();
 	const char* fragmentShaderSource = fragmentShaderSourceStr.c_str();
