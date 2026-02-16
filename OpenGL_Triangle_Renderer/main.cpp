@@ -23,7 +23,18 @@ const char* fragmentShaderSource = "#version 330 core\n"
 	"}\n\0";
  
 std::string LoadShaderPrograms(const std::string& filename) {
-	//return shaderStr;
+	std::string shaderStr = "";
+	std::string line = "";
+
+	std::ifstream myFile(filename.c_str());
+
+	if (myFile.is_open()) {
+		while (std::getline(myFile, line)) {      // Storing each line of a file until EOF
+			shaderStr = line + '\n';              // Concatenate each line of program
+		}
+		myFile.close();
+	}
+	return shaderStr;
 }
 
 static void processInput(GLFWwindow* window)
