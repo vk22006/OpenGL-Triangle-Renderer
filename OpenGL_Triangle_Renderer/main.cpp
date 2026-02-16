@@ -8,21 +8,9 @@
 const int SCR_WIDTH = 750;
 const int SCR_HEIGHT = 750;
 
-// ===| Shader Programs |==================================================================
-const char* vertexShaderSource = "#version 330 core\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"void main()\n"
-	"{\n"
-	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	"}\0";
-const char* fragmentShaderSource = "#version 330 core\n"
-	"out vec4 FragColor;\n"
-	"void main()\n"
-	"{\n"
-	"   FragColor = vec4(1.1f, 0.8f, 0.2f, 1.0f);\n"    // Change the color of triangle here
-	"}\n\0";
- 
-std::string LoadShaderPrograms(const std::string& filename) {
+// ===| Load Shader Programs |==================================================================
+
+std::string LoadShaderProgram(const std::string& filename) {
 	std::string shaderStr = "";
 	std::string line = "";
 
@@ -30,7 +18,7 @@ std::string LoadShaderPrograms(const std::string& filename) {
 
 	if (myFile.is_open()) {
 		while (std::getline(myFile, line)) {      // Storing each line of a file until EOF
-			shaderStr = line + '\n';              // Concatenate each line of program
+			shaderStr += line + '\n';             // Append each line of program (fix: use +=)
 		}
 		myFile.close();
 	}
@@ -92,10 +80,18 @@ static GLFWwindow* Initialize() {
 // ===| Creating and linking Linker, Fragment Shaders to a Shader program |======================
 
 static unsigned int CreateLinkShader() {
-	//Vertex shader
+	std::string vertexShaderSourceStr = LoadShaderProgram("./shaders/vertexShader.glsl");
+	std::string fragmentShaderSourceStr = LoadShaderProgram("./shaders/fraagmentShader.glsl");
+
+	const char* vertexShaderSource = vertexShaderSourceStr.c_str();
+	const char* fragmentShaderSource = fragmentShaderSourceStr.c_str();
+
+	// Vertex shader 
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
+
 	int success;
 	char infoLog[512];
 	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
@@ -105,7 +101,7 @@ static unsigned int CreateLinkShader() {
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << "\n";
 	}
 
-	//Fragment shader
+	// Fragment shader
 	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
@@ -120,7 +116,7 @@ static unsigned int CreateLinkShader() {
 	unsigned int shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);     // Attaching vertex shader with shader program
 	glAttachShader(shaderProgram, fragmentShader);   // Attaching fragment shader with shader program
-	glLinkProgram(shaderProgram);                    // Linking the above attached sahders with the program
+	glLinkProgram(shaderProgram);                    // Linking the above attached shaders with the program
 
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if (!success) {
@@ -128,7 +124,7 @@ static unsigned int CreateLinkShader() {
 		std::cout << "ERROR::SHADER::PROGRAM::SHADER::LINKING_FAILED\n" << infoLog << "\n";
 	}
 
-	// Deleting indvitual shaders after linking
+	// Deleting individual shaders after linking
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
