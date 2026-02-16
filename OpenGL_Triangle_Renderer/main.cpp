@@ -22,6 +22,9 @@ const char* fragmentShaderSource = "#version 330 core\n"
 	"   FragColor = vec4(1.1f, 0.8f, 0.2f, 1.0f);\n"    // Change the color of triangle here
 	"}\n\0";
  
+std::string LoadShaderPrograms(const std::string& filename) {
+	//return shaderStr;
+}
 
 static void processInput(GLFWwindow* window)
 {
