@@ -1,7 +1,10 @@
 #version 330 core
 
+in vec3 vColor;
+
 out vec4 FragColor;
+
 void main()
 {
-	FragColor = vec4(1.1f, 0.8f, 0.2f, 1.0f);    // Change the color of triangle here
+    FragColor = vec4(vColor, 1.0);
 }

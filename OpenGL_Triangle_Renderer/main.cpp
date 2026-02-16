@@ -133,35 +133,61 @@ static unsigned int CreateLinkShader() {
 
 // ===| Generate and Bind VAO, VBO |=============================================================
 
-static unsigned int GenerateBindArrayBuffer(unsigned int* VBO) {
+static unsigned int GenerateBindArrayBuffer(unsigned int* VBO1, unsigned int* VBO2) {
 	//Stores in CPU
-	const std::vector<float> vertices = {
+	const std::vector<float> vertexCoords = {
 		// x     y     z  
-		-0.8f, -0.8f, 0.0f,
-		0.8f, -0.8f, 0.0f,
-		0.0f, 0.8f, 0.0f
+		-0.5f, -0.2f, 0.0f,
+		0.5f, -0.2f, 0.0f,
+		0.0f, 0.5f, 0.0f
+	};
+
+	const std::vector<float> vertexColors = {
+		// r    g    b
+		1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f
 	};
 
 	//Transfer memory to GPU
 
-	//Generate and bind VAO
+	// Generate and bind VAO
 	unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	glGenBuffers(1, VBO); // Use pointer to set VBO in main
-	glBindBuffer(GL_ARRAY_BUFFER, *VBO);
-
-	//Sending data and specifying its target, size and its usage
+	// Generate, bind, enable vertex atrribute and sending data for VBOs
+	// For VBO1 : Coordinates
+	glGenBuffers(1, VBO1);
+	glBindBuffer(GL_ARRAY_BUFFER, *VBO1);
 	glBufferData(
 		GL_ARRAY_BUFFER,
-		vertices.size() * sizeof(float),
-		vertices.data(),
+		vertexCoords.size() * sizeof(float),
+		vertexCoords.data(),
 		GL_STATIC_DRAW
 	);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	// For VBO2 : Colors
+	glGenBuffers(1, VBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, *VBO2);
+	glBufferData(
+		GL_ARRAY_BUFFER,
+		vertexColors.size() * sizeof(float),
+		vertexColors.data(),
+		GL_STATIC_DRAW
+	);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	
+
+	//Unbind and disable after completion
+	glBindVertexArray(0);
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 
 	return VAO;
 }
@@ -175,7 +201,7 @@ static void RenderLoop(GLFWwindow* window, unsigned int shaderProgram, unsigned 
 		processInput(window);
 
 		// render
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// draw our first triangle
@@ -196,15 +222,16 @@ int main() {
 
 	unsigned int shaderProgram = CreateLinkShader();
 
-	unsigned int VBO; // Declare VBO
-	unsigned int VAO = GenerateBindArrayBuffer(&VBO); // Pass VBO by pointer
+	std::vector<unsigned int> VBOs(2);
+	unsigned int VAO = GenerateBindArrayBuffer(&VBOs[0], &VBOs[1]); // Pass VBO by pointer
 
 	RenderLoop(window, shaderProgram, VAO);
 
 	//Cleanup
 
 	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &VBOs[0]);
+	glDeleteBuffers(1, &VBOs[1]);
 	glDeleteProgram(shaderProgram);
 	glfwTerminate();
 
