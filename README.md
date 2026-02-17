@@ -1,43 +1,28 @@
-# Modern OpenGL Showcase
+# OpenGL Triangle Renderer
 
-A structured, milestone-driven journey through modern OpenGL development.
+A mini-project which uses OpenGL to render a triangle in a window.
 
-This repository documents my progressive learning and implementation of real-time rendering techniques using modern OpenGL. Each major milestone is tagged to reflect significant conceptual and technical improvements.
+In order to achieve this, we need to follow the graphics pipeline. Here, I have implemented:
 
----
+- Shader programs for
+    - Vertex Shader
+    - Fragment Shader
+-  VAO's (Vertex Array Object)
+- VBO's (Vertex Buffer Object)
+- Swapping buffers
 
-## Purpose
+## Tools used
+- IDE: Visual Studio 2026
+- Libraries: GLFW, GLAD
 
-- Develop a strong foundation in modern OpenGL
-- Implement core and advanced real-time rendering techniques
-- Track growth through versioned milestones
-- Serve as a portfolio-ready showcase of graphics programming skills
+## Objectives
 
-> Note: A separate repository will focus on custom engine development.  
-> This project is dedicated purely to OpenGL progression.
+- Organize and showcase my progress
+- To implement an end-to-end graphics pipeline and using it to render a triangle
 
----
+## License
 
-## 🧱 Project Structure
-
-Each milestone builds upon the previous one. Tags are used to mark significant achievements.
-
-Example progression:
-
-- Basic window & context creation
-- Rendering a triangle
-- Shaders (vertex & fragment)
-- And others..(in progress)
-
----
-
-## Milestones
-
-Major achievements are tagged using:
-
-v0.1.0 Triangle rendering \
-v0.1.1 Triangle with two VBOs \
-...
+This project uses MIT License.
 
 
 ## License
